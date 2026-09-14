@@ -1,0 +1,24 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+logs/*
+!logs/.gitkeep
+
+outputs/generated_responses/*
+!outputs/generated_responses/.gitkeep
+outputs/results/*
+outputs/results2/*
+!outputs/results2/.gitkeep
+!outputs/results/.gitkeep
+
+.env
+.venv/
+venv/
+venv-european-ifeval/
+
+# Private experiment code that depends on the non-public LLM-SFT repository.
+scripts/*_based_on_LLM-SFT.py
+scripts/*_based_on_LLM-SFT.sh

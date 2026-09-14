@@ -1,0 +1,7 @@
+absl-py==1.4.0
+immutabledict==4.2.1
+nltk==3.9.1
+numpy<2
+regex
+fasttext
+huggingface-hub
