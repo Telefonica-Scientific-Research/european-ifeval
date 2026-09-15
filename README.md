@@ -2,13 +2,13 @@
 
 European IFEval is a 50-language benchmark for evaluating whether language
 models follow verifiable instructions. This repository contains the normalized
-benchmark data, the evaluator, and an optional self-contained Hugging Face
+benchmark data, the evaluator and an optional self-contained Hugging Face
 generation example.
 
 The core workflow is independent of any model or inference framework:
 
 ```text
-model or external inference system
+Model or external inference system
               |
               v
 {"prompt": "...", "response": "..."} JSONL
@@ -17,7 +17,7 @@ model or external inference system
 European IFEval evaluator
               |
               v
-strict and loose scores
+Strict and loose accuracy scores
 ```
 
 ## Repository contents
@@ -27,10 +27,7 @@ strict and loose scores
 - `examples/`: a minimal valid input/response pair for a smoke test.
 - `scripts/1_generate_responses.py`: optional off-the-shelf Hugging Face example.
 - `scripts/2_evaluate_generated_responses.sh`: convenience batch evaluator.
-- `prompt_templates/`: multilingual prompt templates used by the example generator.
-
-Generated responses, evaluation results, logs, and virtual environments are
-excluded from Git.
+- `prompt_templates/`: multilingual Alpaca-style prompt templates used by the example generator.
 
 ## Install the evaluator
 
@@ -70,7 +67,7 @@ The `prompt` must exactly match its value in the input dataset. A complete
 evaluation requires exactly one response for every input prompt. Response order
 does not matter because the evaluator joins records by the prompt string.
 
-Your inference system may use any framework, API, hosted model, or local model
+Your inference system may use any framework, API, hosted model or local model
 as long as it produces this format.
 
 ## Evaluator smoke test
@@ -128,8 +125,7 @@ export GLOTLID_MODEL_PATH=/path/to/glotlid/model.bin
 ## Optional Hugging Face generation example
 
 Generation is optional and has a separate, much larger dependency set. The
-provided example supports ordinary off-the-shelf causal language models; it
-does not depend on a training repository or private checkpoint layout.
+provided example supports ordinary off-the-shelf causal language models.
 
 Install generation dependencies:
 
@@ -158,7 +154,7 @@ The default output is:
 outputs/generated_responses/ca/tiny-aya-global/off-the-shelf.jsonl
 ```
 
-For a quick generation smoke test, use `--limit`; a partial response file is
+For a quick generation smoke test, use `--limit`. A partial response file is
 useful for checking model loading but cannot be evaluated against the complete
 benchmark dataset:
 
@@ -171,8 +167,8 @@ python scripts/1_generate_responses.py \
   --output /tmp/ca-responses-smoke.jsonl
 ```
 
-Generation uses deterministic greedy decoding. `CohereLabs/tiny-aya-global`
-requires a Hugging Face account, acceptance of its access conditions, and
+Generation uses deterministic greedy decoding. Note that `CohereLabs/tiny-aya-global`
+requires a Hugging Face account, acceptance of its access conditions and
 adherence to its non-commercial license and acceptable-use policy. Pass
 `--trust-remote-code` only for model repositories you trust.
 
@@ -201,6 +197,15 @@ ast bg bs ca cs cy da de el es et eu fi fo fr fur ga gd gl hr hu is it ka lb lij
 ```
 
 The repository uses `no` for Norwegian Bokmål and `nn` for Norwegian Nynorsk.
-Datasets contain between 522 and 541 prompts because some localized datasets
-have missing samples recorded in `data/source.json`. See that file for source
-and normalization metadata for each test set.
+
+The [original IFEval benchmark](https://github.com/google-research/google-research/tree/master/instruction_following_eval) (in English)
+contains 541 prompts. All native-speaker and verified-localized datasets in
+this repository retain the complete set. Some machine-translated and localized
+datasets contain 522–524 prompts because their upstream sources omit 17–19
+samples. These known omissions are documented for each language in
+`data/source.json` using the `missing_samples` and `ids_missing_samples` fields.
+
+Evaluation is performed over the prompts present in the selected language
+file. Consequently, results for languages with different prompt counts are not
+based on perfectly identical evaluation sets. See `data/source.json` for each
+dataset's source, quality, coverage and source-language constraint metadata.
