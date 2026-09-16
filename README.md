@@ -5,6 +5,10 @@ models follow verifiable instructions. This repository contains the normalized
 benchmark data, the evaluator and an optional self-contained Hugging Face
 generation example.
 
+The benchmark construction and evaluation methodology are described in
+[*EuroAlpaca: Task-Preserving Localisation of Instruction Data for European
+Languages*](https://arxiv.org/pdf/2609.05043).
+
 The core workflow is independent of any model or inference framework:
 
 ```text
@@ -22,12 +26,17 @@ Strict and loose accuracy scores
 
 ## Repository contents
 
+- `assets/`: figures used in the documentation.
 - `data/`: 50 normalized JSONL test sets and `source.json` provenance metadata.
 - `evaluation/`: instruction-following evaluator and unit tests.
 - `examples/`: a minimal valid input/response pair for a smoke test.
 - `scripts/1_generate_responses.py`: optional off-the-shelf Hugging Face example.
 - `scripts/2_evaluate_generated_responses.sh`: convenience batch evaluator.
 - `prompt_templates/`: multilingual Alpaca-style prompt templates used by the example generator.
+
+`data/source.json` is the per-language manifest recording the selected upstream
+source, provenance category, missing source items and explicit
+response-language constraints for each IFEval dataset.
 
 ## Install the evaluator
 
@@ -81,15 +90,15 @@ The strict and loose prompt-level scores should both be `1.000`.
 
 ## Evaluate model responses
 
-For example, to evaluate Catalan responses:
+For example, to evaluate German responses:
 
 ```bash
-mkdir -p outputs/results/ca/my-model/my-experiment
+mkdir -p outputs/results/de/my-model/my-experiment
 
 python -m evaluation.evaluation_main \
-  --input_data=data/ca.jsonl \
-  --input_response_data=/path/to/ca-responses.jsonl \
-  --output_dir=outputs/results/ca/my-model/my-experiment \
+  --input_data=data/de.jsonl \
+  --input_response_data=/path/to/de-responses.jsonl \
+  --output_dir=outputs/results/de/my-model/my-experiment \
   --glotlid_min_confidence=0.5
 ```
 
@@ -132,19 +141,19 @@ Check the command without loading a model:
 python scripts/1_generate_responses.py --help
 ```
 
-Generate the full Catalan response file:
+Generate the full German response file:
 
 ```bash
 python scripts/1_generate_responses.py \
   --model CohereLabs/tiny-aya-global \
-  --language ca \
+  --language de \
   --model-type it
 ```
 
 The default output is:
 
 ```text
-outputs/generated_responses/ca/tiny-aya-global/off-the-shelf.jsonl
+outputs/generated_responses/de/tiny-aya-global/off-the-shelf.jsonl
 ```
 
 For a quick generation smoke test, use `--limit`. A partial response file is
@@ -154,10 +163,10 @@ benchmark dataset:
 ```bash
 python scripts/1_generate_responses.py \
   --model CohereLabs/tiny-aya-global \
-  --language ca \
+  --language de \
   --model-type it \
   --limit 2 \
-  --output /tmp/ca-responses-smoke.jsonl
+  --output /tmp/de-responses-smoke.jsonl
 ```
 
 Generation uses deterministic greedy decoding. Note that `CohereLabs/tiny-aya-global`
@@ -185,11 +194,71 @@ outputs/results/{language}/{model}/{experiment}/
 
 ## Languages
 
-```text
-ast bg bs ca cs cy da de el es et eu fi fo fr fur ga gd gl hr hu is it ka lb lij lmo lt ltg lv mk mt nl nn no oc pl pt ro ru sc scn sk sl sq sr sv szl uk vec
-```
+![Map of the European languages and regional varieties covered by EuroAlpaca and European IFEval](assets/europe_linguistic_map.png)
 
-The repository uses `no` for Norwegian Bokmål and `nn` for Norwegian Nynorsk.
+*Approximate traditional geographic areas associated with the languages and
+regional varieties covered by EuroAlpaca and European IFEval. Boundaries are
+schematic and do not represent exclusive or current speaker distributions.
+The map is reproduced from Figure 2 of the linked paper and is based on FUEN
+(2013).*
+
+| Dataset code | Language |
+|---|---|
+| `ast` | Asturian |
+| `bg` | Bulgarian |
+| `bs` | Bosnian |
+| `ca` | Catalan |
+| `cs` | Czech |
+| `cy` | Welsh |
+| `da` | Danish |
+| `de` | German |
+| `el` | Greek |
+| `es` | Spanish |
+| `et` | Estonian |
+| `eu` | Basque |
+| `fi` | Finnish |
+| `fo` | Faroese |
+| `fr` | French |
+| `fur` | Friulian |
+| `ga` | Irish |
+| `gd` | Scottish Gaelic |
+| `gl` | Galician |
+| `hr` | Croatian |
+| `hu` | Hungarian |
+| `is` | Icelandic |
+| `it` | Italian |
+| `ka` | Georgian |
+| `lb` | Luxembourgish |
+| `lij` | Ligurian |
+| `lmo` | Lombard |
+| `lt` | Lithuanian |
+| `ltg` | Latgalian |
+| `lv` | Latvian |
+| `mk` | Macedonian |
+| `mt` | Maltese |
+| `nl` | Dutch |
+| `nn` | Norwegian Nynorsk |
+| `no` | Norwegian Bokmål |
+| `oc` | Occitan |
+| `pl` | Polish |
+| `pt` | Portuguese |
+| `ro` | Romanian |
+| `ru` | Russian |
+| `sc` | Sardinian |
+| `scn` | Sicilian |
+| `sk` | Slovak |
+| `sl` | Slovenian |
+| `sq` | Albanian |
+| `sr` | Serbian |
+| `sv` | Swedish |
+| `szl` | Silesian |
+| `uk` | Ukrainian |
+| `vec` | Venetian |
+
+The map uses `NOB` and `NNO` for Norwegian Bokmål and Norwegian Nynorsk, while
+the repository uses `no` and `nn`, respectively. `EN` marks the English source
+language discussed in the paper; English is not one of this repository's 50
+benchmark datasets.
 
 The [original IFEval benchmark](https://github.com/google-research/google-research/tree/master/instruction_following_eval) (in English)
 contains 541 prompts. All native-speaker and verified-localized datasets in
