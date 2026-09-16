@@ -198,9 +198,7 @@ outputs/results/{language}/{model}/{experiment}/
 
 *Approximate traditional geographic areas associated with the languages and
 regional varieties covered by EuroAlpaca and European IFEval. Boundaries are
-schematic and do not represent exclusive or current speaker distributions.
-The map is reproduced from Figure 2 of the linked paper and is based on FUEN
-(2013).*
+schematic and do not represent exclusive or current speaker distributions.*
 
 | Dataset code | Language |
 |---|---|
@@ -257,8 +255,7 @@ The map is reproduced from Figure 2 of the linked paper and is based on FUEN
 
 The map uses `NOB` and `NNO` for Norwegian Bokmål and Norwegian Nynorsk, while
 the repository uses `no` and `nn`, respectively. `EN` marks the English source
-language discussed in the paper; English is not one of this repository's 50
-benchmark datasets.
+language discussed in the paper.
 
 The [original IFEval benchmark](https://github.com/google-research/google-research/tree/master/instruction_following_eval) (in English)
 contains 541 prompts. All native-speaker and verified-localized datasets in
