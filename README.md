@@ -48,13 +48,6 @@ python -m pip install -r requirements.txt
 python -m nltk.downloader punkt punkt_tab
 ```
 
-Check the installation:
-
-```bash
-python -m pip check
-python -m unittest discover -s evaluation -p '*_test.py' -v
-```
-
 ## Prediction file format
 
 The evaluator accepts JSON Lines with one object per benchmark prompt:

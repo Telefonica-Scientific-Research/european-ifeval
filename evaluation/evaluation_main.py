@@ -270,9 +270,6 @@ def print_report(outputs):
     instruction_total = 0
     instruction_correct = 0
 
-    tier0_total = collections.defaultdict(int)
-    tier0_correct = collections.defaultdict(int)
-
     tier1_total = collections.defaultdict(int)
     tier1_correct = collections.defaultdict(int)
 
@@ -290,41 +287,27 @@ def print_report(outputs):
         for instruction_id, followed_or_not in zip(
                 instruction_id_list, follow_instruction_list
         ):
-            instruction_id = instruction_id.split(":")[0]
-            tier0_total[instruction_id] += 1
-            if followed_or_not:
-                tier0_correct[instruction_id] += 1
-
-        for instruction_id, followed_or_not in zip(
-                instruction_id_list, follow_instruction_list
-        ):
             tier1_total[instruction_id] += 1
             if followed_or_not:
                 tier1_correct[instruction_id] += 1
 
-    # print(f"prompt-level: {prompt_correct / prompt_total}")
-    # print(f"instruction-level: {instruction_correct / instruction_total}")
-    # print()
-    # for instruction_id in sorted(tier0_total.keys()):
-    #   accuracy = tier0_correct[instruction_id] / tier0_total[instruction_id]
-    #   print(f"{instruction_id} {accuracy}")
-    # print()
-    # for instruction_id in sorted(tier1_total.keys()):
-    #   accuracy = tier1_correct[instruction_id] / tier1_total[instruction_id]
-    #   print(f"{instruction_id} {accuracy}")
-    results = []
-    results.append(f"{prompt_correct / prompt_total:.3f}")
-    results.append(f"{instruction_correct / instruction_total:.3f}")
-
+    print(
+        "Prompt-level accuracy:      "
+        f"{prompt_correct / prompt_total:.3f} "
+        f"({prompt_correct}/{prompt_total})"
+    )
+    print(
+        "Instruction-level accuracy: "
+        f"{instruction_correct / instruction_total:.3f} "
+        f"({instruction_correct}/{instruction_total})"
+    )
+    print("Per-instruction accuracy:")
     for instruction_id in sorted(tier1_total.keys()):
         accuracy = tier1_correct[instruction_id] / tier1_total[instruction_id]
-        results.append(f"{accuracy:.3f}")
-
-    # Print values as a single line with tab separation
-    print("\t".join(results))
-
-
-
+        print(
+            f"  {instruction_id}: {accuracy:.3f} "
+            f"({tier1_correct[instruction_id]}/{tier1_total[instruction_id]})"
+        )
 
 def main(argv):
     if len(argv) > 1:
@@ -351,10 +334,6 @@ def main(argv):
         outputs = []
         for inp in inputs:
             outputs.append(func(inp, prompt_to_response))
-        follow_all_instructions = [o.follow_all_instructions for o in outputs]
-        accuracy = sum(follow_all_instructions) / len(outputs)
-        logging.info("Accuracy: %f", accuracy)
-
         output_jsonl_name = os.path.join(
             _OUTPUT_DIR.value, output_file_name + ".jsonl"
         )
@@ -379,26 +358,33 @@ def main(argv):
 
         # Prints instruction following accuracy report.
         print("=" * 64)
-        print(f"{output_jsonl_name} Accuracy Scores:")
+        evaluation_mode = output_file_name.removeprefix("eval_results_")
+        print(f"{evaluation_mode.capitalize()} evaluation")
+        print(f"Results: {output_jsonl_name}")
         print_report(outputs)
-        print(
-            "language_detection_failed: "
-            f"{instructions.get_language_detection_failures()}"
-        )
-        print(
-            "language_detection_failed_note: detector could not provide a "
-            "usable language decision; confident wrong-language predictions "
-            "still count as incorrect but are not included here"
-        )
-        language_detection_failures_by_run[os.path.basename(output_jsonl_name)] = (
+        language_detection_failure_count = (
             instructions.get_language_detection_failures()
         )
+        print(
+            "Language-detection failures: "
+            f"{language_detection_failure_count}"
+        )
+        if language_detection_failure_count:
+            print(
+                "Note: a language-detection failure means the detector could "
+                "not provide a usable decision. Confident wrong-language "
+                "predictions count as incorrect but are not included here."
+            )
+        language_detection_failures_by_run[os.path.basename(output_jsonl_name)] = (
+            language_detection_failure_count
+        )
 
-    summary = ", ".join(
-        f"{name}={count}"
-        for name, count in language_detection_failures_by_run.items()
-    )
-    print(f"language_detection_failed_summary: {summary}")
+    if any(language_detection_failures_by_run.values()):
+        summary = ", ".join(
+            f"{name}={count}"
+            for name, count in language_detection_failures_by_run.items()
+        )
+        print(f"Language-detection failure summary: {summary}")
 
 
 if __name__ == "__main__":
