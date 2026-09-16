@@ -200,6 +200,7 @@ outputs/results/{language}/{model}/{experiment}/
 regional varieties covered by EuroAlpaca and European IFEval. Boundaries are
 schematic and do not represent exclusive or current speaker distributions.*
 
+
 | Dataset code | Language |
 |---|---|
 | `ast` | Asturian |
@@ -252,6 +253,7 @@ schematic and do not represent exclusive or current speaker distributions.*
 | `szl` | Silesian |
 | `uk` | Ukrainian |
 | `vec` | Venetian |
+
 
 The map uses `NOB` and `NNO` for Norwegian Bokmål and Norwegian Nynorsk, while
 the repository uses `no` and `nn`, respectively. `EN` marks the English source
