@@ -1,0 +1,19 @@
+European IFEval
+Copyright 2026 Telefónica Innovación Digital, S.L.
+
+This product includes software derived from IFEval by Google Research.
+Copyright 2024 The Google Research Authors.
+https://github.com/google-research/google-research/tree/master/instruction_following_eval
+
+This product also incorporates multilingual evaluator enhancements from the
+Marco-Bench-MIF project (ACL 2025), developed by the Marco-Bench-MIF team.
+https://github.com/AIDC-AI/Marco-Bench-MIF
+
+The Google Research and Marco-Bench-MIF components are provided under the
+Apache License, Version 2.0.
+
+Dataset sources, licenses and attributions are documented separately in
+DATA_LICENSES.md.
+
+This NOTICE file is for attribution purposes only and does not modify the
+applicable license terms.

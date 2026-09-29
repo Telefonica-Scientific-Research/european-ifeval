@@ -270,3 +270,11 @@ Evaluation is performed over the prompts present in the selected language
 file. Consequently, results for languages with different prompt counts are not
 based on perfectly identical evaluation sets. See `data/source.json` for each
 dataset's source, quality, coverage and source-language constraint metadata.
+
+## License
+
+The European IFEval source code is licensed under the [Apache License
+2.0](LICENSE). Third-party software attributions are recorded in
+[NOTICE](NOTICE). The benchmark datasets retain their upstream terms and are
+not covered by the code license. See [Dataset licensing and
+attribution](DATA_LICENSES.md) for the per-source licenses and attribution.
