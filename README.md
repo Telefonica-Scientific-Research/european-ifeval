@@ -7,7 +7,8 @@ generation example.
 
 The benchmark construction and evaluation methodology are described in
 [*EuroAlpaca: Task-Preserving Localisation of Instruction Data for European
-Languages*](https://arxiv.org/pdf/2609.05043).
+Languages*](https://arxiv.org/abs/2609.05043), accepted at the INLG 2026
+conference.
 
 The core workflow is independent of any model or inference framework:
 
