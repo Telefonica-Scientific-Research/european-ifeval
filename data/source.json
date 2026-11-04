@@ -59,7 +59,7 @@
     "source": "https://huggingface.co/datasets/LumiOpen/ifeval_mt/tree/main/fi",
     "quality": "native_speaker",
     "has_source_language_answer_constraints": true,
-    "num_source_language_answer_constraint_samples": 60,
+    "num_source_language_answer_constraint_samples": 67,
     "missing_samples": 0,
     "ids_missing_samples": []
   },
